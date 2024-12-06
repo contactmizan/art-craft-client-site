@@ -15,7 +15,7 @@ const Navbar = () => {
     </>
 
     return (
-        <div className="navbar bg-base-100">
+        <div className="navbar bg-base-200 rounded-lg">
             <div className="navbar-start">
                 <div className="dropdown">
                     <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -38,10 +38,12 @@ const Navbar = () => {
                         {navLinks}
                     </ul>
                 </div>
-                <a className="btn btn-ghost text-xl">Art& & Craft</a>
-                <div className="">
+                <div className="md:flex items-center gap-3">
+                    <h2 className="text-xl"><span className="text-amber-950 text-2xl font-bold">Art</span> <br />  &  <span className="text-[#896956] font-bold text-2xl">Craft</span></h2>
+
                     <img src="https://i.ibb.co.com/JzLJ5s2/craft-logo.jpg" className="h-10 w-auto rounded" alt="logo" />
                 </div>
+
             </div>
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1">

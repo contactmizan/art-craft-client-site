@@ -5,7 +5,7 @@ const Home = () => {
     return (
         <div>
             <Navbar></Navbar>
-            <h2 className="text-3xl">This is Home.</h2>
+            <h2 className="text-3xl text-[#896956]">This is Home.</h2>
         </div>
     );
 }
