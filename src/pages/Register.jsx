@@ -1,20 +1,31 @@
 import { Link } from "react-router-dom";
 import Navbar from "./shared/Navbar";
-
+import { useContext } from "react";
+import { AuthContext } from "../providers/AuthProvider";
 
 const Register = () => {
+    const { createUser } = useContext(AuthContext);
 
-    const handleRegister = e => {
+    const handleRegister = (e) => {
         e.preventDefault();
-        console.log(e.currentTarget);
-        const form = new FormData(e.currentTarget);
-        console.log(form);
-        const name = form.get('name');
-        const email = form.get('email');
-        const photo = form.get('photo');
-        const password = form.get('password');
+        const form = e.target;
+        const name = form.name.value;
+        const email = form.email.value;
+        const photo = form.photo.value;
+        const password = form.password.value;
+
         console.log(name, email, photo, password);
-    }
+
+        // Create user with name, email, photo, and password
+        createUser(email, password, name, photo)
+            .then(result => {
+                console.log("User registered successfully",result.user);
+                form.reset(); // Reset the form after successful registration
+            })
+            .catch((error) => {
+                console.error("Error during registration:", error);
+            });
+    };
 
     return (
         <div>
@@ -23,35 +34,63 @@ const Register = () => {
                 <div className="">
                     <div className="text-center">
                         <h1 className="text-3xl font-bold">Register Please</h1>
-
                     </div>
                     <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl mt-3">
-                        <form onClick={handleRegister} className="card-body">
+                        <form onSubmit={handleRegister} className="card-body">
                             <div className="form-control">
                                 <label className="label">
                                     <span className="label-text">Name</span>
                                 </label>
-                                <input type="text" name="name" placeholder="Name" className="input input-bordered" required />
+                                <input
+                                    type="text"
+                                    name="name"
+                                    placeholder="Name"
+                                    className="input input-bordered"
+                                    required
+                                />
                             </div>
                             <div className="form-control">
                                 <label className="label">
                                     <span className="label-text">Email</span>
                                 </label>
-                                <input type="email" name="email" placeholder="Email" className="input input-bordered" required />
+                                <input
+                                    type="email"
+                                    name="email"
+                                    placeholder="Email"
+                                    className="input input-bordered"
+                                    required
+                                />
                             </div>
                             <div className="form-control">
                                 <label className="label">
                                     <span className="label-text">Photo URL</span>
                                 </label>
-                                <input type="text" name="photo" placeholder="Photo URL" className="input input-bordered" required />
+                                <input
+                                    type="text"
+                                    name="photo"
+                                    placeholder="Photo URL"
+                                    className="input input-bordered"
+                                    required
+                                />
                             </div>
                             <div className="form-control">
                                 <label className="label">
                                     <span className="label-text">Password</span>
                                 </label>
-                                <input type="password" name="password" placeholder="Password" className="input input-bordered" required />
+                                <input
+                                    type="password"
+                                    name="password"
+                                    placeholder="Password"
+                                    className="input input-bordered"
+                                    required
+                                />
                                 <label className="label">
-                                    <p>Already have an account? Please <Link className=" hover:underline text-blue-700" to="/login">Login</Link></p>
+                                    <p>
+                                        Already have an account? Please{" "}
+                                        <Link className=" hover:underline text-blue-700" to="/login">
+                                            Login
+                                        </Link>
+                                    </p>
                                 </label>
                             </div>
                             <div className="form-control">
@@ -63,6 +102,6 @@ const Register = () => {
             </div>
         </div>
     );
-}
+};
 
 export default Register;

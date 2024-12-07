@@ -1,3 +1,5 @@
+import Banner from "./shared/Banner";
+import Footer from "./shared/Footer";
 import Navbar from "./shared/Navbar";
 
 
@@ -5,7 +7,12 @@ const Home = () => {
     return (
         <div>
             <Navbar></Navbar>
-            <h2 className="text-3xl text-[#896956]">This is Home.</h2>
+            <div className="mt-6">
+                <Banner></Banner>
+            </div>
+            <div className="mt-6">
+                <Footer></Footer>
+            </div>
         </div>
     );
 }

@@ -1,13 +1,27 @@
 import { Link } from "react-router-dom";
 import Navbar from "./shared/Navbar";
 import { FaGoogle } from "react-icons/fa";
+import { useContext } from "react";
+import { AuthContext } from "../providers/AuthProvider";
 
 const Login = () => {
 
-const handleLogin =e=>{
-    e.preventDefault();
-    console.log(e.currentTurget);
-}
+    const { signInWithGoogle } = useContext(AuthContext);
+
+    const handleLogin = e => {
+        e.preventDefault();
+        console.log(e.currentTurget);
+    }
+
+    const handleGoogleSignIn = async () => {
+        try {
+            await signInWithGoogle();  // Await Google sign-in
+         
+        } catch (error) {
+            console.error("Google Sign-in Error:", error.message);
+        }
+    };
+
     return (
         <div>
             <Navbar></Navbar>
@@ -34,7 +48,7 @@ const handleLogin =e=>{
                             {/* Google popup login */}
                             <div className="text-center">
                                 <h2>or</h2>
-                                <button className="
+                                <button onClick={handleGoogleSignIn} className="
                             btn btn-primary"><FaGoogle className="text-3xl mr-2" /> Google Login</button>
                             </div>
 
