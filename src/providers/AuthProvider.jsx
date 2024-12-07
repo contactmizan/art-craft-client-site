@@ -1,7 +1,12 @@
 import { createContext, useState } from "react";
-import { createUserWithEmailAndPassword, getAuth, signInWithPopup, updateProfile } from "firebase/auth";
+import {
+    createUserWithEmailAndPassword,
+    getAuth,
+    signInWithPopup,
+    updateProfile,
+    GoogleAuthProvider,
+} from "firebase/auth";
 import app from "../firebase/firebase.config";
-import { GoogleAuthProvider } from "firebase/auth/web-extension";
 
 export const AuthContext = createContext(null);
 
@@ -11,21 +16,21 @@ const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    // Create a new user with email, password, name, and photoURL
     const createUser = (email, password, name, photoURL) => {
         setLoading(true);
         return createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 const createdUser = userCredential.user;
 
-                // Log the complete UserImpl object
-                console.log(createdUser);
+                console.log(createdUser); // Log UserImpl object
 
-                // Update profile with name and photo
+                // Update the profile with name and photo
                 return updateProfile(createdUser, {
                     displayName: name,
                     photoURL: photoURL,
                 }).then(() => {
-                    console.log("UserImpl object after profile update:", createdUser);
+                    console.log("User profile updated:", createdUser);
                     setUser({
                         ...createdUser,
                         displayName: name,
@@ -39,28 +44,31 @@ const AuthProvider = ({ children }) => {
             .finally(() => setLoading(false));
     };
 
-    // google sign in method
-    const signInWithGoogle= async()=>{
-        const provider=new GoogleAuthProvider();
+    // Google Sign-In Method
+    const signInWithGoogle = async () => {
+        const provider = new GoogleAuthProvider(); // Corrected import
         setLoading(true);
         try {
-            const result = await signInWithPopup(auth, provider);  // Use await here
-            const user = result.user;
-            console.log('User signed in with Google:', user);
-            setUser(user);  // Update the user state
+            const result = await signInWithPopup(auth, provider); // Await for Google sign-in
+            const signedInUser = result.user;
+
+            console.log("User signed in with Google:", signedInUser);
+
+            // Update user state
+            setUser(signedInUser);
         } catch (error) {
-            console.error('Error during Google sign-in:', error.message);
+            console.error("Error during Google sign-in:", error.message);
         } finally {
             setLoading(false);
         }
     };
 
-
+    // Context value
     const authInfo = {
         user,
         loading,
         createUser,
-        signInWithGoogle
+        signInWithGoogle,
     };
 
     return (
