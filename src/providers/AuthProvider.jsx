@@ -5,6 +5,7 @@ import {
     signInWithPopup,
     updateProfile,
     GoogleAuthProvider,
+    GithubAuthProvider,
 } from "firebase/auth";
 import app from "../firebase/firebase.config";
 
@@ -46,10 +47,10 @@ const AuthProvider = ({ children }) => {
 
     // Google Sign-In Method
     const signInWithGoogle = async () => {
-        const provider = new GoogleAuthProvider(); // Corrected import
+        const provider = new GoogleAuthProvider();
         setLoading(true);
         try {
-            const result = await signInWithPopup(auth, provider); // Await for Google sign-in
+            const result = await signInWithPopup(auth, provider); 
             const signedInUser = result.user;
 
             console.log("User signed in with Google:", signedInUser);
@@ -63,12 +64,29 @@ const AuthProvider = ({ children }) => {
         }
     };
 
+     // GitHub Sign-In Method
+     const signInWithGitHub = async () => {
+        const provider = new GithubAuthProvider();
+        setLoading(true);
+        try {
+            const result = await signInWithPopup(auth, provider);
+            const user = result.user;
+            console.log('User signed in with GitHub:', user);
+            setUser(user); // Update the user state
+        } catch (error) {
+            console.error('Error during GitHub sign-in:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     // Context value
     const authInfo = {
         user,
         loading,
         createUser,
         signInWithGoogle,
+        signInWithGitHub,
     };
 
     return (
