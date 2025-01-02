@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 import {
     createUserWithEmailAndPassword,
     getAuth,
@@ -6,6 +6,7 @@ import {
     updateProfile,
     GoogleAuthProvider,
     GithubAuthProvider,
+    onAuthStateChanged,
 } from "firebase/auth";
 import app from "../firebase/firebase.config";
 
@@ -17,6 +18,16 @@ const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    // Persist user on reload
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+            setUser(currentUser);
+            setLoading(false); // Stop loading after user is determined
+        });
+
+        return () => unsubscribe(); // Cleanup on unmount
+    }, []);
+
     // Create a new user with email, password, name, and photoURL
     const createUser = (email, password, name, photoURL) => {
         setLoading(true);
@@ -24,14 +35,14 @@ const AuthProvider = ({ children }) => {
             .then((userCredential) => {
                 const createdUser = userCredential.user;
 
-                console.log(createdUser); // Log UserImpl object
+                console.log("User created:", createdUser); // Debug
 
-                // Update the profile with name and photo
+                // Update profile with name and photo
                 return updateProfile(createdUser, {
                     displayName: name,
                     photoURL: photoURL,
                 }).then(() => {
-                    console.log("User profile updated:", createdUser);
+                    console.log("Profile updated:", createdUser);
                     setUser({
                         ...createdUser,
                         displayName: name,
@@ -41,6 +52,7 @@ const AuthProvider = ({ children }) => {
             })
             .catch((error) => {
                 console.error("Error creating user:", error);
+                alert(`Error: ${error.message}`);
             })
             .finally(() => setLoading(false));
     };
@@ -50,7 +62,7 @@ const AuthProvider = ({ children }) => {
         const provider = new GoogleAuthProvider();
         setLoading(true);
         try {
-            const result = await signInWithPopup(auth, provider); 
+            const result = await signInWithPopup(auth, provider);
             const signedInUser = result.user;
 
             console.log("User signed in with Google:", signedInUser);
@@ -59,22 +71,27 @@ const AuthProvider = ({ children }) => {
             setUser(signedInUser);
         } catch (error) {
             console.error("Error during Google sign-in:", error.message);
+            alert(`Error: ${error.message}`);
         } finally {
             setLoading(false);
         }
     };
 
-     // GitHub Sign-In Method
-     const signInWithGitHub = async () => {
+    // GitHub Sign-In Method
+    const signInWithGitHub = async () => {
         const provider = new GithubAuthProvider();
         setLoading(true);
         try {
             const result = await signInWithPopup(auth, provider);
             const user = result.user;
-            console.log('User signed in with GitHub:', user);
-            setUser(user); // Update the user state
+
+            console.log("User signed in with GitHub:", user);
+
+            // Update user state
+            setUser(user);
         } catch (error) {
-            console.error('Error during GitHub sign-in:', error);
+            console.error("Error during GitHub sign-in:", error);
+            alert(`Error: ${error.message}`);
         } finally {
             setLoading(false);
         }

@@ -1,10 +1,11 @@
-import { Link } from "react-router-dom";
-import Navbar from "./shared/Navbar";
-import { useContext } from "react";
-import { AuthContext } from "../providers/AuthProvider";
+import { useContext } from 'react';
+import { AuthContext } from '../providers/AuthProvider';
+import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
+import Navbar from './shared/Navbar';
 
 const Register = () => {
-    const { createUser } = useContext(AuthContext);
+    const { createUser, loading } = useContext(AuthContext);
 
     const handleRegister = (e) => {
         e.preventDefault();
@@ -14,24 +15,52 @@ const Register = () => {
         const photo = form.photo.value;
         const password = form.password.value;
 
-        console.log(name, email, photo, password);
+        // Validate Password
+        const passwordValidation = (password) => {
+            const hasUpperCase = /[A-Z]/.test(password);
+            const hasLowerCase = /[a-z]/.test(password);
+            const isLongEnough = password.length >= 6;
+
+            if (!hasUpperCase) {
+                toast.error("Password must contain at least one uppercase letter.");
+                return false;
+            }
+            if (!hasLowerCase) {
+                toast.error("Password must contain at least one lowercase letter.");
+                return false;
+            }
+            if (!isLongEnough) {
+                toast.error("Password must be at least 6 characters long.");
+                return false;
+            }
+            return true;
+        };
+
+        if (!passwordValidation(password)) {
+            return; 
+        }
 
         // Create user with name, email, photo, and password
         createUser(email, password, name, photo)
-            .then(result => {
-                console.log("User registered successfully",result.user);
-                form.reset(); // Reset the form after successful registration
+            .then(() => {
+                toast.success("Registration successful! You can now log in.");
+                form.reset();
             })
             .catch((error) => {
                 console.error("Error during registration:", error);
+                toast.error(`Error: ${error.message}`);
             });
     };
 
+    if (loading) {
+        return <div className="text-center">Loading...</div>;
+    }
+
     return (
         <div>
-            <Navbar></Navbar>
+            <Navbar />
             <div className="hero min-h-screen">
-                <div className="">
+                <div>
                     <div className="text-center">
                         <h1 className="text-3xl font-bold">Register Please</h1>
                     </div>
@@ -87,7 +116,7 @@ const Register = () => {
                                 <label className="label">
                                     <p>
                                         Already have an account? Please{" "}
-                                        <Link className=" hover:underline text-blue-700" to="/login">
+                                        <Link className="hover:underline text-blue-700" to="/login">
                                             Login
                                         </Link>
                                     </p>
