@@ -17,8 +17,6 @@ const Root = () => {
         draggable 
         pauseOnHover 
       />
-
-      <h1 className="text-3xl font-bold">Welcome to Art & Craft</h1>
       
       <Outlet />
     </div>

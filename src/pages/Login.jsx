@@ -3,6 +3,7 @@ import Navbar from "./shared/Navbar";
 import { FaGoogle, FaGithub } from "react-icons/fa";
 import { useContext } from "react";
 import { AuthContext } from "../providers/AuthProvider";
+import Footer from "./shared/Footer";
 
 const Login = () => {
     const { signInWithGoogle, user, signInWithGitHub } = useContext(AuthContext);
@@ -107,6 +108,10 @@ const Login = () => {
                         </form>
                     </div>
                 </div>
+            </div>
+            {/* footer */}
+            <div>
+                <Footer></Footer>
             </div>
         </div>
     );

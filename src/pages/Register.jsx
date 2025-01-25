@@ -3,6 +3,7 @@ import { AuthContext } from '../providers/AuthProvider';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import Navbar from './shared/Navbar';
+import Footer from './shared/Footer';
 
 const Register = () => {
     const { createUser, loading } = useContext(AuthContext);
@@ -37,7 +38,7 @@ const Register = () => {
         };
 
         if (!passwordValidation(password)) {
-            return; 
+            return;
         }
 
         // Create user with name, email, photo, and password
@@ -128,6 +129,10 @@ const Register = () => {
                         </form>
                     </div>
                 </div>
+            </div>
+            {/* footer */}
+            <div>
+                <Footer></Footer>
             </div>
         </div>
     );

@@ -6,6 +6,7 @@ import AllItems from "../pages/AllItems";
 import AddItem from "../pages/AddItem";
 import MyItemList from "../pages/MyItemList";
 import Register from "../pages/Register";
+import UpdateItem from "../pages/UpdateItem";
 
 const router = createBrowserRouter([
     {
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
             {
                 path: '/additem',
                 element: <AddItem></AddItem>
+            },
+            {
+                path: '/updateitem',
+                element: <UpdateItem></UpdateItem>
             },
             {
                 path: '/myitemlist',
