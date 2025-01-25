@@ -15,12 +15,12 @@ const router = createBrowserRouter([
         children: [
             {
                 path: '/',
-                element: <Home></Home>,
-                loader: () => fetch('http://localhost:5000/artCraft')
+                element: <Home></Home>
             },
             {
                 path: '/allitems',
-                element: <AllItems></AllItems>
+                element: <AllItems></AllItems>,
+                loader: () => fetch('http://localhost:5000/artCraft')
             },
             {
                 path: '/additem',
