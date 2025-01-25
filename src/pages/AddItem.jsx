@@ -1,15 +1,56 @@
 import Footer from "./shared/Footer";
 import Navbar from "./shared/Navbar";
-
+import Swal from 'sweetalert2';
 
 const AddItem = () => {
+
+    const handleAddItem = event => {
+        event.preventDefault();
+        const form = event.target;
+        const photo = form.photo.value;
+        const item = form.item.value;
+        const subcategory = form.subcategory.value;
+        const description = form.description.value;
+        const price = form.price.value;
+        const rating = form.rating.value;
+        const customization = form.customization.value;
+        const processTime = form.processTime.value;
+        const stock = form.stock.value;
+        const email = form.email.value;
+        const name = form.name.value;
+
+        const newItem = { photo, item, subcategory, description, price, rating, customization, processTime, stock, email, name }
+        console.log(newItem);
+
+        //send dATA to the server
+        fetch('http://localhost:5000/artCraft', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(newItem)
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                if (data.insertedId) {
+                    Swal.fire({
+                        title: 'Success!',
+                        text: 'Item Added Successfully',
+                        icon: 'success',
+                        confirmButtonText: 'Cool'
+                    })
+                }
+            })
+    }
+
     return (
         <div>
             <Navbar></Navbar>
             <h2 className="text-3xl font-extrabold my-4">Add Craft Item</h2>
 
             {/* form */}
-            <form className="bg-[#F4F3F0] p-24">
+            <form onSubmit={handleAddItem} className="bg-[#F4F3F0] p-24">
                 {/* form photo url row */}
                 <div className="mb-4">
                     <div className="form-control w-fill">
@@ -97,7 +138,7 @@ const AddItem = () => {
                         </label>
                     </div>
                 </div>
-                {/* form row */}
+                {/* form email & name row */}
                 <div className="md:flex gap-2
                 ">
                     <div className="form-control md:w-1/2 mb-4">
