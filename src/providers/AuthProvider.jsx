@@ -8,6 +8,7 @@ import {
     GithubAuthProvider,
     onAuthStateChanged,
     signOut,
+    signInWithEmailAndPassword,
 } from "firebase/auth";
 import app from "../firebase/firebase.config";
 
@@ -18,6 +19,10 @@ const auth = getAuth(app);
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+
+    const signIn = (email, password) => {
+        return signInWithEmailAndPassword(auth, email, password);
+    }
 
     const logOut = () => {
         return signOut(auth);
@@ -109,6 +114,7 @@ const AuthProvider = ({ children }) => {
         createUser,
         signInWithGoogle,
         signInWithGitHub,
+        signIn,
         logOut
     };
 

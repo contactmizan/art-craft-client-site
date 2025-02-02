@@ -6,7 +6,7 @@ import { AuthContext } from "../providers/AuthProvider";
 import Footer from "./shared/Footer";
 
 const Login = () => {
-    const { signInWithGoogle, user, signInWithGitHub } = useContext(AuthContext);
+    const { signInWithGoogle, user, signInWithGitHub, signIn } = useContext(AuthContext);
 
     const handleLogin = (e) => {
         e.preventDefault();
@@ -15,12 +15,20 @@ const Login = () => {
         const password = form.password.value;
 
         console.log("Email:", email, "Password:", password);
-        // Add email/password login logic here if required
+
+        signIn(email, password)
+            .then(result => {
+                console.log(result.user);
+            })
+            .catch(error => {
+                console.log(error);
+            })
+
     };
 
     const handleGoogleSignIn = async () => {
         try {
-            await signInWithGoogle(); // Call Google Sign-in
+            await signInWithGoogle(); 
             console.log("Google sign-in successful");
         } catch (error) {
             console.error("Google Sign-in Error:", error.message);
