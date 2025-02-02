@@ -7,6 +7,8 @@ import AddItem from "../pages/AddItem";
 import MyItemList from "../pages/MyItemList";
 import Register from "../pages/Register";
 import UpdateItem from "../pages/UpdateItem";
+import ViewDetails from "../pages/ViewDetails";
+import PrivateRoute from "./PrivateRoute";
 
 const router = createBrowserRouter([
     {
@@ -23,16 +25,21 @@ const router = createBrowserRouter([
                 loader: () => fetch('http://localhost:5000/artCraft')
             },
             {
+                path: '/viewdetails/:id',
+                element: <PrivateRoute><ViewDetails></ViewDetails></PrivateRoute>,
+                loader: ({ params }) => fetch(`http://localhost:5000/artCraft/${params.id}`)
+            },
+            {
                 path: '/additem',
                 element: <AddItem></AddItem>
             },
             {
                 path: '/updateitem',
-                element: <UpdateItem></UpdateItem>
+                element: <PrivateRoute><UpdateItem></UpdateItem></PrivateRoute>
             },
             {
                 path: '/myitemlist',
-                element: <MyItemList></MyItemList>
+                element: <PrivateRoute><MyItemList></MyItemList></PrivateRoute>
             },
             {
                 path: "/login",

@@ -5,6 +5,11 @@ import { useLoaderData } from "react-router-dom";
 
 const AllItems = () => {
     const artCrafts = useLoaderData();
+
+    if (!artCrafts.length) {
+        return <h2 className="text-center text-xl text-blue-600 my-10">Loading items...</h2>;
+    }
+    
     return (
         <div>
             <Navbar></Navbar>
@@ -12,7 +17,7 @@ const AllItems = () => {
 
             <div className="">
                 <h1 className="text-4xl text-center my-7">Art Craft Items: {artCrafts.length}</h1>
-                <div className="grid md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {
                         artCrafts.map(artCraft => <ArtCraftCard key={artCraft._id}
                             artCraft={artCraft}></ArtCraftCard>)
