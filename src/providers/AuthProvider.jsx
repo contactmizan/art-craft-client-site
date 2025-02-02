@@ -21,10 +21,12 @@ const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     const signIn = (email, password) => {
+        setLoading(true);
         return signInWithEmailAndPassword(auth, email, password);
     }
 
     const logOut = () => {
+        setLoading(true);
         return signOut(auth);
     }
 

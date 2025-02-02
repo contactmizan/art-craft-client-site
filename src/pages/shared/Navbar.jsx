@@ -8,6 +8,8 @@ const Navbar = () => {
 
     const { user, logOut } = useContext(AuthContext);
 
+    console.log(user);
+
     const handleSignOut = () => {
         logOut()
             .then()
@@ -64,8 +66,8 @@ const Navbar = () => {
             <div className="navbar-end gap-2">
                 <div className="w-10 rounded-full">
                     <img className="rounded-full"
-                        alt="Tailwind CSS Navbar component"
-                        src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                        alt=""
+                        src={user} />
                 </div>
 
                 {

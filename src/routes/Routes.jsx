@@ -26,8 +26,14 @@ const router = createBrowserRouter([
             },
             {
                 path: '/viewdetails/:id',
-                element: <PrivateRoute><ViewDetails></ViewDetails></PrivateRoute>,
-                loader: ({ params }) => fetch(`http://localhost:5000/artCraft/${params.id}`)
+                element: <ViewDetails></ViewDetails>,
+                loader: async ({ params }) => {
+                    const response = await fetch(`http://localhost:5000/artCraft/${params.id}`);
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch item');
+                    }
+                    return response.json();
+                }
             },
             {
                 path: '/additem',
