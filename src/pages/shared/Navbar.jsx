@@ -21,7 +21,6 @@ const Navbar = () => {
         <li><NavLink to="/allitems">All Items</NavLink></li>
         <li><NavLink to="/additem">Add Item</NavLink></li>
         <li><NavLink to="/updateitem">Update Item</NavLink></li>
-        <li><NavLink to="/myitemlist">My List</NavLink></li>
         <li><NavLink to="/login">Login</NavLink></li>
         <li><NavLink to="/register">Register</NavLink></li>
 

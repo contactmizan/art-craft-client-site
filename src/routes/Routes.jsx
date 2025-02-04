@@ -4,7 +4,6 @@ import Home from "../pages/Home";
 import Login from "../pages/Login";
 import AllItems from "../pages/AllItems";
 import AddItem from "../pages/AddItem";
-import MyItemList from "../pages/MyItemList";
 import Register from "../pages/Register";
 import UpdateItem from "../pages/UpdateItem";
 import ViewDetails from "../pages/ViewDetails";
@@ -53,14 +52,6 @@ const router = createBrowserRouter([
           </PrivateRoute>
         ),
         loader: ({ params }) => fetch(`http://localhost:5000/artCraft/${params.id}`)
-      },
-      {
-        path: '/myitemlist',
-        element: (
-          <PrivateRoute>
-            <MyItemList></MyItemList>
-          </PrivateRoute>
-        )
       },
       {
         path: "/login",
