@@ -1,149 +1,180 @@
-import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
+import Swal from "sweetalert2";
 import Navbar from "./shared/Navbar";
 import Footer from "./shared/Footer";
 
+
 const UpdateItem = () => {
-    const { id } = useParams(); // Get the item ID from URL params
-    const navigate = useNavigate();
-    const [item, setItem] = useState({});
-    const [formData, setFormData] = useState({
-        photo: "",
-        item: "",
-        subcategory: "",
-        description: "",
-        price: "",
-        rating: "",
-        customization: "",
-        processTime: "",
-        stock: "",
-    });
 
-    // Fetch item data on component load
-    useEffect(() => {
-        fetch(`http://localhost:5000/artCraft/${id}`)
-            .then((response) => response.json())
-            .then((data) => {
-                setItem(data);
-                setFormData({
-                    photo: data.photo,
-                    item: data.item,
-                    subcategory: data.subcategory,
-                    description: data.description,
-                    price: data.price,
-                    rating: data.rating,
-                    customization: data.customization,
-                    processTime: data.processTime,
-                    stock: data.stock,
-                });
-            })
-            .catch((error) => console.error("Error fetching item:", error));
-    }, [id]);
+    const artCraft = useLoaderData();
+    const { photo, item, subcategory, description, price, rating, customization, processTime, stock, email, name, _id } = artCraft;
 
-    // Handle form input changes
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-    };
+    const handleUpdateItem = event => {
+        event.preventDefault();
+        const form = event.target;
+        const photo = form.photo.value;
+        const item = form.item.value;
+        const subcategory = form.subcategory.value;
+        const description = form.description.value;
+        const price = form.price.value;
+        const rating = form.rating.value;
+        const customization = form.customization.value;
+        const processTime = form.processTime.value;
+        const stock = form.stock.value;
+        const email = form.email.value;
+        const name = form.name.value;
 
-    // Handle form submission
-    const handleSubmit = (e) => {
-        e.preventDefault();
+        const updatedItem = { photo, item, subcategory, description, price, rating, customization, processTime, stock, email, name }
+        console.log(updatedItem);
 
-        // Update the item on the backend
-        fetch(`http://localhost:5000/artCraft/${id}`, {
-            method: "PUT",
+        //send dATA to the server
+        fetch(`http://localhost:5000/artCraft/${_id}`, {
+            method: 'PUT',
             headers: {
-                "Content-Type": "application/json",
+                'content-type': 'application/json'
             },
-            body: JSON.stringify(formData),
+            body: JSON.stringify(updatedItem)
         })
-            .then((response) => response.json())
-            .then(() => {
-                alert("Item updated successfully!");
-                navigate(`/viewdetails/${id}`); // Redirect to view the updated item
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                if (data.modifiedCount > 0) {
+                    Swal.fire({
+                        title: 'Success!',
+                        text: 'Item Updated Successfully',
+                        icon: 'success',
+                        confirmButtonText: 'Cool'
+                    })
+                }
             })
-            .catch((error) => {
-                alert("Error updating item.");
-                console.error("Error updating item:", error);
-            });
-    };
+    }
 
     return (
         <div>
-            <Navbar />
-            <div className="max-w-3xl mx-auto p-6 my-4 bg-white shadow-lg rounded-lg">
-                <h2 className="text-3xl font-bold text-gray-800">Update Item</h2>
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    <input
-                        type="text"
-                        name="item"
-                        value={formData.item}
-                        onChange={handleChange}
-                        placeholder="Item Name"
-                        className="input input-bordered w-full"
-                    />
-                    <input
-                        type="text"
-                        name="subcategory"
-                        value={formData.subcategory}
-                        onChange={handleChange}
-                        placeholder="Subcategory"
-                        className="input input-bordered w-full"
-                    />
-                    <textarea
-                        name="description"
-                        value={formData.description}
-                        onChange={handleChange}
-                        placeholder="Description"
-                        className="textarea textarea-bordered w-full"
-                    />
-                    <input
-                        type="number"
-                        name="price"
-                        value={formData.price}
-                        onChange={handleChange}
-                        placeholder="Price"
-                        className="input input-bordered w-full"
-                    />
-                    <input
-                        type="number"
-                        name="rating"
-                        value={formData.rating}
-                        onChange={handleChange}
-                        placeholder="Rating"
-                        className="input input-bordered w-full"
-                    />
-                    <input
-                        type="text"
-                        name="customization"
-                        value={formData.customization}
-                        onChange={handleChange}
-                        placeholder="Customization"
-                        className="input input-bordered w-full"
-                    />
-                    <input
-                        type="text"
-                        name="processTime"
-                        value={formData.processTime}
-                        onChange={handleChange}
-                        placeholder="Processing Time"
-                        className="input input-bordered w-full"
-                    />
-                    <input
-                        type="text"
-                        name="stock"
-                        value={formData.stock}
-                        onChange={handleChange}
-                        placeholder="Stock"
-                        className="input input-bordered w-full"
-                    />
-                    <button type="submit" className="btn btn-primary">Update Item</button>
-                </form>
+            <Navbar></Navbar>
+            <h2 className="text-3xl font-extrabold my-4">Update : {item}</h2>
+
+            {/* form */}
+            <form onSubmit={handleUpdateItem} className="bg-[#F4F3F0] p-24">
+                {/* form photo url row */}
+                <div className="mb-4">
+                    <div className="form-control w-fill">
+                        <label className="label">
+                            <span className="label-text">Image URL</span>
+                        </label>
+                        <label className="input-group">
+                            <input type="text" name="photo" defaultValue={photo} placeholder="Enter Image URL" className="input input-bordered w-full" id="" />
+                        </label>
+                    </div>
+                </div>
+                {/* form item-name-sub cat row */}
+                <div className="md:flex gap-2 items-center mb-4">
+                    <div className="form-control md:w-1/2">
+                        <label className="label">
+                            <span className="label-text">Item Name</span>
+                        </label>
+                        <label className="input-group">
+                            <input type="text" name="item" defaultValue={item} placeholder="Enter Item Name" className="input input-bordered w-full" id="" />
+                        </label>
+                    </div>
+                    <div className="form-control md:w-1/2">
+                        <label className="label">
+                            <span>Subcategory</span>
+                        </label>
+                        <label className="input-group">
+                            <input type="text" name="subcategory" defaultValue={subcategory} placeholder="Enter subcategory Name" className="input input-bordered w-full" id="" />
+                        </label>
+                    </div>
+                </div>
+                {/* form description & price  row */}
+                <div className="md:flex gap-2 items-center mb-4">
+                    <div className="form-control md:w-1/2">
+                        <label className="label">
+                            <span className="label-text">Description</span>
+                        </label>
+                        <label className="input-group">
+                            <input type="text" name="description" defaultValue={description} placeholder="write a short description" className="input input-bordered w-full" id="" />
+                        </label>
+                    </div>
+                    <div className="form-control md:w-1/2">
+                        <label className="label">
+                            <span>Price</span>
+                        </label>
+                        <label className="input-group">
+                            <input type="text" name="price" placeholder="Enter item price" defaultValue={price} className="input input-bordered w-full" id="" />
+                        </label>
+                    </div>
+                </div>
+                {/* form rating & customi.. row */}
+                <div className="md:flex gap-2 items-center mb-4">
+                    <div className="form-control md:w-1/2">
+                        <label className="label">
+                            <span className="label-text">Rating</span>
+                        </label>
+                        <label className="input-group">
+                            <input type="text" name="rating" placeholder="Item rating" defaultValue={rating} className="input input-bordered w-full" id="" />
+                        </label>
+                    </div>
+                    <div className="form-control md:w-1/2">
+                        <label className="label">
+                            <span>Customization</span>
+                        </label>
+                        <label className="input-group">
+                            <input type="text" name="customization" defaultValue={customization} placeholder="yes or no" className="input input-bordered w-full" id="" />
+                        </label>
+                    </div>
+                </div>
+                {/* form process time & stocks row */}
+                <div className="md:flex gap-2 items-center mb-4">
+                    <div className="form-control md:w-1/2">
+                        <label className="label">
+                            <span className="label-text">Process Time</span>
+                        </label>
+                        <label className="input-group">
+                            <input type="text" name="processTime" defaultValue={processTime} placeholder="Approx time to prepare" className="input input-bordered w-full" id="" />
+                        </label>
+                    </div>
+                    <div className="form-control md:w-1/2">
+                        <label className="label">
+                            <span>Stock Status</span>
+                        </label>
+                        <label className="input-group">
+                            <input type="text" name="stock" defaultValue={stock} placeholder="" className="input input-bordered w-full" id="" />
+                        </label>
+                    </div>
+                </div>
+                {/* form email & name row */}
+                <div className="md:flex gap-2
+            ">
+                    <div className="form-control md:w-1/2 mb-4">
+                        <label className="label">
+                            <span className="label-text">Your Email</span>
+                        </label>
+                        <label className="input-group">
+                            <input type="text" name="email" defaultValue={email} placeholder="Enter Your Email" className="input input-bordered w-full" id="" />
+                        </label>
+                    </div>
+                    <div className="form-control md:w-1/2">
+                        <label className="label">
+                            <span>Your Name</span>
+                        </label>
+                        <label className="input-group">
+                            <input type="text" name="name" defaultValue={name} placeholder="Enter Your Name" className="input input-bordered w-full" id="" />
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <input type="submit" className="btn btn-block bg-gray-400" value="Update Item" />
+                </div>
+            </form>
+
+            {/* footer */}
+            <div className="mt-6">
+                <Footer></Footer>
             </div>
-            <Footer />
         </div>
     );
-};
+}
 
 export default UpdateItem;

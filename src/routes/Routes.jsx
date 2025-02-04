@@ -9,7 +9,6 @@ import Register from "../pages/Register";
 import UpdateItem from "../pages/UpdateItem";
 import ViewDetails from "../pages/ViewDetails";
 import PrivateRoute from "./PrivateRoute";
-import DeleteItem from "../pages/DeleteItem";
 
 // Create routes
 const router = createBrowserRouter([
@@ -47,17 +46,13 @@ const router = createBrowserRouter([
         element: <AddItem></AddItem>
       },
       {
-        // Update Item route - Protected
-        path: '/updateitem',
+        path: '/updateitem/:id',
         element: (
           <PrivateRoute>
             <UpdateItem></UpdateItem>
           </PrivateRoute>
-        )
-      },
-      {
-        path: '/deleteitem',
-        element: <DeleteItem></DeleteItem>
+        ),
+        loader: ({ params }) => fetch(`http://localhost:5000/artCraft/${params.id}`)
       },
       {
         path: '/myitemlist',
