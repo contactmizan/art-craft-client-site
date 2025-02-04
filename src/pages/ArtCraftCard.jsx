@@ -3,7 +3,7 @@ import { CiStar } from "react-icons/ci";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
-const ArtCraftCard = ({ artCraft }) => {
+const ArtCraftCard = ({ artCraft, artCrafts, setArtCrafts }) => {
 
     const { photo, item, subcategory, description, price, rating, customization, processTime, stock, email, name, _id } = artCraft;
 
@@ -20,7 +20,7 @@ const ArtCraftCard = ({ artCraft }) => {
         }).then((result) => {
             if (result.isConfirmed) {
 
-                fetch(`http://localhost:5000/artCraft/${_id}`,  {
+                fetch(`http://localhost:5000/artCraft/${_id}`, {
                     method: 'DELETE'
                 })
                     .then(res => res.json())
@@ -32,6 +32,9 @@ const ArtCraftCard = ({ artCraft }) => {
                                 text: "Your file has been deleted.",
                                 icon: "success"
                             });
+                            //delete houar sathe sathe jeno remove hoy
+                            const remaining = artCrafts.filter(craft => craft._id !== _id);
+                            setArtCrafts(remaining);
                         }
                     })
             }

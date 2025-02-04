@@ -1,15 +1,16 @@
+import { useState } from "react";
 import ArtCraftCard from "./ArtCraftCard";
 import Footer from "./shared/Footer";
 import Navbar from "./shared/Navbar";
 import { useLoaderData } from "react-router-dom";
 
 const AllItems = () => {
-    const artCrafts = useLoaderData();
-
+    const loadedArtCrafts = useLoaderData();
+    const [artCrafts, setArtCrafts] = useState(loadedArtCrafts)
     if (!artCrafts.length) {
         return <h2 className="text-center text-xl text-blue-600 my-10">Loading items...</h2>;
     }
-    
+
     return (
         <div>
             <Navbar></Navbar>
@@ -20,6 +21,8 @@ const AllItems = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {
                         artCrafts.map(artCraft => <ArtCraftCard key={artCraft._id}
+                            artCrafts={artCrafts}
+                            setArtCrafts={setArtCrafts}
                             artCraft={artCraft}></ArtCraftCard>)
                     }
                 </div>
