@@ -1,9 +1,43 @@
 
 import { CiStar } from "react-icons/ci";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const ArtCraftCard = ({ artCraft }) => {
+
     const { photo, item, subcategory, description, price, rating, customization, processTime, stock, email, name, _id } = artCraft;
+
+    const handleDelete = _id => {
+        console.log(_id);
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                fetch(`http://localhost:5000/artCraft/${_id}`,  {
+                    method: 'DELETE'
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log(data);
+                        if (data.deletedCount > 0) {
+                            Swal.fire({
+                                title: "Deleted!",
+                                text: "Your file has been deleted.",
+                                icon: "success"
+                            });
+                        }
+                    })
+            }
+        });
+    }
+
     return (
         <div className="card card-compact bg-base-100 shadow-xl my-4">
             <figure>
@@ -28,11 +62,18 @@ const ArtCraftCard = ({ artCraft }) => {
                 <h2>Process Time: {processTime}</h2>
                 <h2>Stock: {stock}</h2>
 
-                <div className="card-actions justify-end">
+                <div className="card-actions justify-end my-2">
                     <Link to={`/viewdetails/${_id}`}>
                         <button className="btn btn-primary">View Details</button>
                     </Link>
+                    <Link to={`/updateitem/${_id}`}>
+                        <button className="btn btn-primary">Update</button>
+                    </Link>
+                    <Link >
+                        <button onClick={() => handleDelete(_id)} className="btn btn-primary">Delete</button>
+                    </Link>
                 </div>
+
             </div>
         </div>
     );
