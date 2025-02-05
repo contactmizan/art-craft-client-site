@@ -64,9 +64,15 @@ const Navbar = () => {
             </div>
             <div className="navbar-end gap-2">
                 <div className="w-10 rounded-full">
-                    <img className="rounded-full"
-                        alt=""
-                        src={user} />
+                    {/* User Profile Image */}
+                    {user?.photoURL ? (
+                        <img className="w-10 h-10 rounded-full border-2 border-gray-300" src={user.photoURL} alt="User" />
+                    ) : (
+                        <img className="w-10 h-10 rounded-full border-2 border-gray-300"
+                            alt="default user"
+                            src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                    )}
+
                 </div>
 
                 {
