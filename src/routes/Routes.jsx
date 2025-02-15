@@ -22,7 +22,7 @@ const router = createBrowserRouter([
       {
         path: '/allitems',
         element: <AllItems></AllItems>,
-        loader: () => fetch('http://localhost:5000/artCraft') // Fetch all items
+        loader: () => fetch(' https://art-craft-server-site.vercel.app/artCraft') // Fetch all items
       },
       {
         // View Details route - Protected
@@ -33,7 +33,7 @@ const router = createBrowserRouter([
           </PrivateRoute>
         ),
         loader: async ({ params }) => {
-          const response = await fetch(`http://localhost:5000/artCraft/${params.id}`);
+          const response = await fetch(` https://art-craft-server-site.vercel.app/artCraft/${params.id}`);
           if (!response.ok) {
             throw new Error('Item not found');
           }
@@ -51,7 +51,7 @@ const router = createBrowserRouter([
             <UpdateItem></UpdateItem>
           </PrivateRoute>
         ),
-        loader: ({ params }) => fetch(`http://localhost:5000/artCraft/${params.id}`)
+        loader: ({ params }) => fetch(` https://art-craft-server-site.vercel.app/artCraft/${params.id}`)
       },
       {
         path: "/login",

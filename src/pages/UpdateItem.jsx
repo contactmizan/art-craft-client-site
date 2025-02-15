@@ -28,7 +28,7 @@ const UpdateItem = () => {
         console.log(updatedItem);
 
         //send dATA to the server
-        fetch(`http://localhost:5000/artCraft/${_id}`, {
+        fetch(` https://art-craft-server-site.vercel.app/artCraft/${_id}`, {
             method: 'PUT',
             headers: {
                 'content-type': 'application/json'
